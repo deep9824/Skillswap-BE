@@ -6,6 +6,11 @@ const userSchema = new mongoose.Schema<IUser>(
   {
     email: { type: String, required: true, unique: true, trim: true },
     password: { type: String, required: true },
+    name: { type: String, required: true },
+    bio: { type: String },
+    skills: [{ type: String }],
+    location: { type: String },
+    isMentor: { type: Boolean, default: false },
   },
   { timestamps: true }
 );

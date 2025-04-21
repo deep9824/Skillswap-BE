@@ -2,18 +2,16 @@ import { Request, Response } from "express";
 import User from "../models/authModel";
 import generateToken from "../utils/generateToken";
 
-export const registerUser: any = async (req: Request, res: Response) => {
-  const { email, password } = req.body;
+export const registerUser = async (req: Request, res: Response) => {
+  const { name, email, password } = req.body;
   let emailExist = await User.findOne({ email });
   if (emailExist) {
-    return res.status(400).json({ message: "Email already exists" });
+    res.status(400).json({ message: "Email already exists" });
   }
-  let user = await User.create({ email, password });
+  let user = await User.create({ name, email, password });
   if (user) {
-    return res.status(201).json({
-      _id: user._id,
-      email: user.email,
-      token: await generateToken(user._id),
+    res.status(201).json({
+      message: "User Created !",
     });
   }
 };
@@ -26,7 +24,7 @@ export const loginUser = async (req: Request, res: Response) => {
     res.json({
       _id: user._id,
       email: user.email,
-      token: generateToken(user._id),
+      token: await generateToken(user._id),
     });
   } else {
     res.status(401).json({ message: "Invalid email or password" });
