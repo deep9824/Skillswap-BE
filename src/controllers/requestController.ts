@@ -50,3 +50,35 @@ export const respondToRequest: any = async (req: any, res: Response) => {
 
   res.json({ message: `Request ${status}` });
 };
+
+export const getIncomingRequests: any = async (
+  req: AuthenticatedRequest,
+  res: Response
+) => {
+  try {
+    const requests = await SkillRequest.find({ receiver: req.user._id })
+      .populate("sender", "name email")
+      .populate("skill", "title")
+      .sort({ createdAt: -1 });
+
+    res.json(requests);
+  } catch (error) {
+    res.status(500).json({ message: "Failed to fetch incoming requests" });
+  }
+};
+
+export const getSentRequests: any = async (
+  req: AuthenticatedRequest,
+  res: Response
+) => {
+  try {
+    const requests = await SkillRequest.find({ sender: req.user._id })
+      .populate("receiver", "name email")
+      .populate("skill", "title")
+      .sort({ createdAt: -1 });
+
+    res.json(requests);
+  } catch (error) {
+    res.status(500).json({ message: "Failed to fetch sent requests" });
+  }
+};

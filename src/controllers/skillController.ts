@@ -25,14 +25,35 @@ export const createSkillListing: any = async (
   res.status(201).json(createdSkill);
 };
 
-
-export const getAllSkills:any = async (_req: Request, res: Response)=> {
+export const getAllSkills = async (req: any, res: Response) => {
   try {
-    const skills = await Skill.find().populate("createdBy", "name skills bio");
-    res.status(200).json(skills);
+    const page = Number(req.query.page) || 1;
+    const limit = Number(req.query.limit) || 10;
+    const keyword = req.query.keyword
+      ? {
+          title: { $regex: req.query.keyword, $options: "i" },
+        }
+      : {};
+
+    const filter = {
+      ...keyword,
+    };
+
+    const total = await Skill.countDocuments(filter);
+
+    const skills = await Skill.find()
+      .populate("createdBy", "name skills bio")
+      .limit(limit)
+      .skip((page - 1) * limit)
+      .sort({ createdAt: -1 });
+    res.status(200).json({
+      skills,
+      currentPage: page,
+      totalPages: Math.ceil(total / limit),
+      totalSkills: total,
+    });
   } catch (error) {
     console.error("Error fetching skills:", error);
     res.status(500).json({ message: "Server error" });
   }
 };
-
