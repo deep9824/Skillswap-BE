@@ -4,6 +4,7 @@ import authRoutes from "./routes/authRoutes";
 import userRoutes from "./routes/userRoutes";
 import skillRoutes from "./routes/skillsRoutes";
 import requestRouter from "./routes/requestRoutes";
+import chatRouter from "./routes/chatRoutes";
 
 dotenv.config();
 const app: Express = express();
@@ -13,5 +14,6 @@ app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/skills", skillRoutes);
 app.use("/api/request", requestRouter);
+app.use("/api/chat", chatRouter);
 
 export { app };
