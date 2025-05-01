@@ -10,7 +10,11 @@ const userSchema = new mongoose.Schema<IUser>(
     bio: { type: String },
     skills: [{ type: String }],
     location: { type: String },
-    isMentor: { type: Boolean, default: false },
+    role: {
+      type: String,
+      enum: ['learner', 'mentor'],
+      default: 'learner',
+    }
   },
   { timestamps: true }
 );

@@ -8,6 +8,6 @@ export interface IUser extends mongoose.Document {
     bio?:string;
     skills?:string[];
     location?:string;
-    isMentor?:boolean
+    role:string
     matchPassword: (enteredPassword: string) => Promise<boolean>;
   }

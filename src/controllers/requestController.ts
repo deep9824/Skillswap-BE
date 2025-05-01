@@ -1,4 +1,4 @@
-import { Response } from "express";
+import { NextFunction, Response } from "express";
 import SkillRequest from "../models/requestModel";
 import { AuthenticatedRequest } from "../interfaces/userInterface";
 
@@ -53,7 +53,8 @@ export const respondToRequest: any = async (req: any, res: Response) => {
 
 export const getIncomingRequests: any = async (
   req: AuthenticatedRequest,
-  res: Response
+  res: Response,
+  next:NextFunction
 ) => {
   try {
     const requests = await SkillRequest.find({ receiver: req.user._id })
@@ -63,13 +64,14 @@ export const getIncomingRequests: any = async (
 
     res.json(requests);
   } catch (error) {
-    res.status(500).json({ message: "Failed to fetch incoming requests" });
+    next(error); 
   }
 };
 
 export const getSentRequests: any = async (
   req: AuthenticatedRequest,
-  res: Response
+  res: Response,
+  next:NextFunction
 ) => {
   try {
     const requests = await SkillRequest.find({ sender: req.user._id })
@@ -79,6 +81,6 @@ export const getSentRequests: any = async (
 
     res.json(requests);
   } catch (error) {
-    res.status(500).json({ message: "Failed to fetch sent requests" });
+    next(error); 
   }
 };

@@ -24,7 +24,7 @@ export const updateUserProfile: any = async (
       bio?: string;
       skills?: string[];
       location?: string;
-      isMentor?: boolean;
+      role?: string;
     };
   },
   res: Response
@@ -37,7 +37,7 @@ export const updateUserProfile: any = async (
     user.bio = req.body.bio || user.bio;
     user.location = req.body.location || user.location;
     user.skills = req.body.skills || user.skills;
-    user.isMentor = req.body.isMentor ?? user.isMentor;
+    user.role = req.body.role ?? user.role;
 
     const updatedUser = await user.save();
 

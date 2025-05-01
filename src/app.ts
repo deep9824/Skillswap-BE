@@ -5,6 +5,7 @@ import userRoutes from "./routes/userRoutes";
 import skillRoutes from "./routes/skillsRoutes";
 import requestRouter from "./routes/requestRoutes";
 import chatRouter from "./routes/chatRoutes";
+import { errorHandler } from "./middlewares/errorMiddleware";
 
 dotenv.config();
 const app: Express = express();
@@ -15,5 +16,5 @@ app.use("/api/users", userRoutes);
 app.use("/api/skills", skillRoutes);
 app.use("/api/request", requestRouter);
 app.use("/api/chat", chatRouter);
-
+app.use(errorHandler);
 export { app };
