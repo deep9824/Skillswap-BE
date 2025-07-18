@@ -1,6 +1,7 @@
 import { Response } from "express";
 import User from "../models/authModel";
 import { AuthenticatedRequest } from "../interfaces/userInterface";
+import { Template } from "../utils/email";
 
 export const getUserProfile: any = async (
   req: AuthenticatedRequest,
@@ -46,5 +47,22 @@ export const updateUserProfile: any = async (
     });
   } else {
     res.status(404).json({ message: "User not found" });
+  }
+};
+
+export const getAllUsers: any = async (req: Request, res: Response) => {
+  try {
+    const users: any = await User.find({}, { email: 1, _id: 0 });
+    if (users) {
+      for await (const recipient of users) {
+        await Template(recipient.email, "../utils/home.ejs");
+      }
+      res.status(200).json({ message: "email sent" });
+    } else {
+      res.status(404).json({ message: "No users found" });
+    }
+  } catch (error) {
+    console.error("Error fetching users:", error);
+    res.status(500).json({ message: "Internal server error" });
   }
 };
